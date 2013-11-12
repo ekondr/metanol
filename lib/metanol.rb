@@ -1,5 +1,8 @@
-require "metanol/version"
+require 'metanol/version'
 
-module Metanol
-  # Your code goes here...
-end
+require 'rails'
+
+require 'metanol/helpers'
+require 'metanol/engine_controller'
+require 'metanol/railtie'
+require 'metanol/engine'
