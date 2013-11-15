@@ -17,8 +17,32 @@ app.initialize!
 
 app.routes.draw do
   resources :tests
+  resources :home
 end
 
 class ApplicationController < ActionController::Base; end
+
+class HomeController < ApplicationController
+  og_meta :type,    'website'
+  og_meta :locale,  'uk_UA'
+
+  wm_meta :alexa,   'alexa code'
+  wm_meta :bing,    'bing code'
+  wm_meta :google,  'google code'
+  wm_meta :yandex,  'yandex code'
+
+  def new
+    render :inline => <<-ERB
+      <%= metanol_wm_tags %>
+    ERB
+  end
+
+  def index
+    og_meta title: "OpenGraph Title", description: "OpenGraph Description"
+    render :inline => <<-ERB
+      <%= metanol_tags %>
+    ERB
+  end
+end
 
 Object.const_set(:ApplicationHelper, Module.new)

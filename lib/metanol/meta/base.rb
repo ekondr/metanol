@@ -5,6 +5,7 @@ module Metanol::Meta
     attr_accessor :value
 
     def initialize(name, value)
+      raise NameError.new "The meta tag '#{name}' isn't supported.", name unless valid?(name)
       @name = name
       @value = value
     end
