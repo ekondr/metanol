@@ -11,8 +11,9 @@ module Metanol
 
     # Render OpenGraph meta tags
     def metanol_og_tags
-      # todo: take the locale and the type value from a config if a user hasn't set them in a controller
-      metanol_render_tags ::Metanol::Meta::OpenGraph
+      result = metanol_render_tags ::Metanol::Meta::OpenGraph
+      result << ::Metanol::Meta::OpenGraph.render_current_url(current_url).html_safe
+      result
     end
 
     # Render main tags, such as title, description, etc.
@@ -23,6 +24,11 @@ module Metanol
     # Render main tags, such as title, description, etc.
     def metanol_main_tags
       metanol_render_tags ::Metanol::Meta::Main
+    end
+
+    # Return a current URL
+    def current_url
+      request.original_url
     end
 
     private

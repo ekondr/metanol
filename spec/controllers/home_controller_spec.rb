@@ -6,6 +6,7 @@ describe HomeController do
     context "all meta tags" do
       before { get :index }
 
+      it { response.should have_selector("meta[content=\"#{url_for(controller: :home, action: :index, host: 'test.host')}\"]", property: 'og:url') }
       it { response.should have_selector('meta[content="OpenGraph Title"]', property: 'og:title') }
       it { response.should have_selector('meta[content="OpenGraph Description"]', property: 'og:description') }
       it { response.should have_selector('meta[content="website"]', property: 'og:type') }
