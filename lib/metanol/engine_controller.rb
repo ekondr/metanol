@@ -12,7 +12,7 @@ module Metanol
 
     module ClassMethods
       def metanol_options
-        @metanol_options ||= {}
+        @@metanol_options ||= {}
       end
 
       def meta(*args)

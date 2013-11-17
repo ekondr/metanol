@@ -22,14 +22,16 @@ end
 
 class ApplicationController < ActionController::Base; end
 
-class HomeController < ApplicationController
-  og_meta :type,    'website'
-  og_meta :locale,  'uk_UA'
-
+class ParentController < ApplicationController
   wm_meta :alexa,   'alexa code'
   wm_meta :bing,    'bing code'
   wm_meta :google,  'google code'
   wm_meta :yandex,  'yandex code'
+end
+
+class HomeController < ParentController
+  og_meta :type,    'website'
+  og_meta :locale,  'uk_UA'
 
   def new
     render :inline => <<-ERB
