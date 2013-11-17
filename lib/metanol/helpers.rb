@@ -16,12 +16,12 @@ module Metanol
       result
     end
 
-    # Render main tags, such as title, description, etc.
+    # Render Webmaster verification tags
     def metanol_wm_tags
       metanol_render_tags ::Metanol::Meta::Webmaster
     end
 
-    # Render main tags, such as title, description, etc.
+    # Render main tags, such as keywords, description, etc.
     def metanol_main_tags
       metanol_render_tags ::Metanol::Meta::Main
     end
