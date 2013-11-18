@@ -20,7 +20,7 @@ describe TestsController do
 
     it { response.should_not have_selector('meta[content="OpenGraph Title"]', property: 'og:title') }
     it { response.should_not have_selector('meta[content="OpenGraph Description"]', property: 'og:description') }
-    it { response.should have_selector('meta[content="Users List"]', name: 'title') }
+    it { response.should have_selector('title', content: 'Users List') }
     it { response.should have_selector('meta[content="Description for a users list"]', name: 'description') }
   end
 
@@ -40,7 +40,7 @@ describe TestsController do
 
     it { response.should have_selector('meta[content="OpenGraph Title"]', property: 'og:title') }
     it { response.should have_selector('meta[content="OpenGraph Description"]', property: 'og:description') }
-    it { response.should_not have_selector('meta[content="Users List"]', name: 'title') }
+    it { response.should_not have_selector('title', content: 'Users List') }
     it { response.should_not have_selector('meta[content="Description for a users list"]', name: 'description') }
   end
 
@@ -60,7 +60,7 @@ describe TestsController do
 
     it { response.should have_selector('meta[content="OpenGraph Title"]', property: 'og:title') }
     it { response.should have_selector('meta[content="OpenGraph Description"]', property: 'og:description') }
-    it { response.should have_selector('meta[content="Users List"]', name: 'title') }
+    it { response.should have_selector('title', content: 'Users List') }
     it { response.should have_selector('meta[content="Description for a users list"]', name: 'description') }
   end
 
@@ -68,7 +68,7 @@ describe TestsController do
     controller do
       def index
         meta :title, "Users List"
-        og_meta fake: "OpenGraph Description"
+        wm_meta fake: "Fake value"
         render :inline => <<-ERB
           <%= metanol_tags %>
         ERB
