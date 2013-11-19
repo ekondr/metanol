@@ -31,23 +31,26 @@ module Metanol
 
       def add_meta_tag(type, *args)
         if args[0].is_a? Hash
+          filters = args[1..-1]
           args[0].each do |name, value|
-            add_meta_by_type type, name, value
+            add_meta_by_type type, name, value, filters
           end
-        elsif args.length == 2
+        else
           name = args[0].to_sym
-          value = args[1].to_sym
-          add_meta_by_type type, name, value
+          value = args[1]
+          filters = args[2..-1]
+          add_meta_by_type type, name, value, filters
         end
       end
 
-      def add_meta_by_type(type, name, value)
+      def add_meta_by_type(type, name, value, filters=[])
         data = meta_data(name)[type]
         key = data[:key]
         if metanol_options.key? key
           metanol_options[key].value = value
+          metanol_options[key].filters = filters
         else
-          metanol_options[key] = data[:type].new(name, value)
+          metanol_options[key] = data[:type].new(name, value, filters)
         end
       end
 

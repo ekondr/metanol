@@ -1,4 +1,3 @@
-#require 'rails/all'
 require 'action_controller/railtie'
 require 'action_view/railtie'
 require 'active_record'
@@ -24,9 +23,8 @@ class ApplicationController < ActionController::Base; end
 
 class ParentController < ApplicationController
   wm_meta :alexa,   'alexa code'
-  wm_meta :bing,    'bing code'
-  wm_meta :google,  'google code'
   wm_meta :yandex,  'yandex code'
+  wm_meta bing: 'bing code', google: 'google code'
 end
 
 class HomeController < ParentController

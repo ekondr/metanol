@@ -78,4 +78,79 @@ describe TestsController do
     it { expect { get :index }.to raise_error(NameError, "The meta tag 'fake' isn't supported.") }
   end
 
+  context "filter whitespaces" do
+    controller do
+      def index
+        meta :description, "Description \t\nfor \ta \tusers \r\nlist", :whitespaces
+        render :inline => <<-ERB
+          <%= metanol_main_tags %>
+        ERB
+      end
+    end
+
+    before { get :index }
+
+    it('success') { response.should have_selector('meta[content="Description   for  a  users   list"]', name: 'description') }
+  end
+
+  context "filter HTML tags" do
+    controller do
+      def index
+        meta({description: "<div>Description <br/>for <b>a users</b> <br>list</div>", keywords: "key,word"}, :html)
+        render :inline => <<-ERB
+          <%= metanol_main_tags %>
+        ERB
+      end
+    end
+
+    before { get :index }
+
+    it('success') { response.should have_selector('meta[content="Description  for a users  list"]', name: 'description') }
+  end
+
+  context "filter HTML tags and whitespaces" do
+    controller do
+      def index
+        meta(:description, "<div>\tDescription \r\n<br/>for \t<b>a users</b> \r\n<br>list</div>", :html, :whitespaces)
+        render :inline => <<-ERB
+          <%= metanol_main_tags %>
+        ERB
+      end
+    end
+
+    before { get :index }
+
+    it('success') { response.should have_selector('meta[content=" Description    for  a users    list"]', name: 'description') }
+  end
+
+  context "filter spaces - leave only 1 space between words" do
+    controller do
+      def index
+        meta :description, "Description   for    a users     list", :overspaces
+        render :inline => <<-ERB
+          <%= metanol_main_tags %>
+        ERB
+      end
+    end
+
+    before { get :index }
+
+    it('success') { response.should have_selector('meta[content="Description for a users list"]', name: 'description') }
+  end
+
+  context "clean up a value from whitespaces, html tags etc (run all filters)" do
+    controller do
+      def index
+        meta(:description, "<div>\tDescription \r\n<br/>for \t<b>a users</b> \r\n<br>list</div>", :clean)
+        render :inline => <<-ERB
+          <%= metanol_main_tags %>
+        ERB
+      end
+    end
+
+    before { get :index }
+
+    it { response.should have_selector('meta[content=" Description for a users list"]', name: 'description') }
+  end
+
 end

@@ -9,7 +9,7 @@ module Metanol::Meta
     }
 
     def render
-      "<meta name=\"#{SUPPORT_TAGS[@name]}\" content=\"#{@value}\" />"
+      "<meta name=\"#{SUPPORT_TAGS[@name]}\" content=\"#{filtered_value}\" />"
     end
 
     protected
