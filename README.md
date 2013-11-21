@@ -58,6 +58,14 @@ There are three methods for setting values for meta tags:
 * `og_meta` - sets a value(s) for OpenGraph's meta tags
 * `wm_meta` - sets a value(s) for Webmaster verification's meta tags
 
+This plugin also gives you the ability to set the TITLE tag: `meta :title, "Page title"` renders into `<title>Page title</title>`.
+
+There are some filters which you can set for methods above:
+* `html` - to get rid of HTML tags in a value (i.e. `meta :title, "Page title", :html`)
+* `overspaces` - to get rid of too many spaces, leave only one space between words
+* `whitespaces` - to get rid of whitespaces in a value (i.e. `meta({title: "Page title", description: 'Page description'}, :html, :whitespaces)`)
+* `clean` - apply `html`, `overspaces` and `whitespaces` filters for a value
+
 Here is the helper's methods for rendering meta tags:
 * `metanol_tags` - renders all meta tags (Webmaster, OpenGraph and other)
 * `metanol_og_tags` - renders only OpenGraph's meta tags
