@@ -50,6 +50,7 @@ describe TestsController do
         meta :title, "Users List"
         meta :description, "Description for a users list"
         og_meta title: "OpenGraph Title", description: "OpenGraph Description"
+        md_meta description: "MicroData Description"
         render :inline => <<-ERB
           <%= metanol_tags %>
         ERB
@@ -62,6 +63,7 @@ describe TestsController do
     it { response.should have_selector('meta[content="OpenGraph Description"]', property: 'og:description') }
     it { response.should have_selector('title', content: 'Users List') }
     it { response.should have_selector('meta[content="Description for a users list"]', name: 'description') }
+    it { response.should have_selector('meta[content="MicroData Description"]', itemprop: 'description') }
   end
 
   context "raise exception for unsupported metas" do
@@ -156,19 +158,22 @@ describe TestsController do
   context "returns meta values in a controller and in a view" do
     controller do
       def index
-        meta :title,    'Users List'
-        wm_meta :alexa, 'alexa code'
-        og_meta title:  'OpenGraph Title'
+        meta :title,          'Users List'
+        wm_meta :alexa,       'alexa code'
+        og_meta title:        'OpenGraph Title'
+        md_meta description:  'MicroData Desc'
 
         @meta = get_meta :title
         @wm_meta = get_wm_meta :alexa
         @og_meta = get_og_meta :title
+        @md_meta = get_md_meta :description
         @og_no_meta = get_og_meta :bad_meta_name
 
         render :inline => <<-ERB
           <span>Main meta is <%= get_meta :title %></span>
           <span>OpenGraph meta is <%= get_og_meta :title %></span>
           <span>Webmaster meta is <%= get_wm_meta :alexa %></span>
+          <span>MicroData meta is <%= get_md_meta :description %></span>
         ERB
       end
     end
@@ -178,9 +183,11 @@ describe TestsController do
     it { response.should have_selector('span', content: 'Main meta is Users List') }
     it { response.should have_selector('span', content: 'OpenGraph meta is OpenGraph Title') }
     it { response.should have_selector('span', content: 'Webmaster meta is alexa code') }
+    it { response.should have_selector('span', content: 'MicroData meta is MicroData Desc') }
     it { assigns(:meta).should == 'Users List' }
     it { assigns(:wm_meta).should == 'alexa code' }
     it { assigns(:og_meta).should == 'OpenGraph Title' }
+    it { assigns(:md_meta).should == 'MicroData Desc' }
     it { assigns(:og_no_meta).should == nil }
   end
 

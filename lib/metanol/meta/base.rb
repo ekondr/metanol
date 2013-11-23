@@ -1,8 +1,7 @@
 module Metanol::Meta
 
   class Base
-    attr_reader :name
-    attr_accessor :value
+    attr_writer :value
 
     SUPPORTED_FILTERS = [:html, :overspaces, :whitespaces, :clean]
 
@@ -18,7 +17,20 @@ module Metanol::Meta
     end
 
     def render
-      raise StandardError.new "Please override this method in a child class"
+      "<meta #{self.attr_name}=\"#{self.name}\" #{self.attr_value}=\"#{self.value}\" />"
+    end
+
+    def name
+      @name
+    end
+
+    def value
+      result = @value
+      return result unless filters?
+      result = self.class.filter_html(result) if @filters.include?(:html) || @filters.include?(:clean)
+      result = self.class.filter_whitespaces(result) if @filters.include?(:whitespaces) || @filters.include?(:clean)
+      result = self.class.filter_overspaces(result) if @filters.include?(:overspaces) || @filters.include?(:clean)
+      result
     end
 
     def self.filter_html(text)
@@ -40,17 +52,16 @@ module Metanol::Meta
       true
     end
 
-    def filtered_value
-      result = @value
-      return result unless filters?
-      result = self.class.filter_html(result) if @filters.include?(:html) || @filters.include?(:clean)
-      result = self.class.filter_whitespaces(result) if @filters.include?(:whitespaces) || @filters.include?(:clean)
-      result = self.class.filter_overspaces(result) if @filters.include?(:overspaces) || @filters.include?(:clean)
-      result
-    end
-
     def filters?
       @filters && !@filters.empty?
+    end
+
+    def attr_name
+      'name'
+    end
+
+    def attr_value
+      'content'
     end
 
     private

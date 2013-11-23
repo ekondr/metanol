@@ -8,8 +8,8 @@ module Metanol::Meta
         alexa: 'alexaVerifyID'
     }
 
-    def render
-      "<meta name=\"#{SUPPORT_TAGS[@name]}\" content=\"#{filtered_value}\" />"
+    def name
+      SUPPORT_TAGS[@name]
     end
 
     protected

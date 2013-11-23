@@ -1,7 +1,3 @@
-require File.join(File.dirname(__FILE__), 'meta/base')
-require File.join(File.dirname(__FILE__), 'meta/main')
-require File.join(File.dirname(__FILE__), 'meta/open_graph')
-require File.join(File.dirname(__FILE__), 'meta/webmaster')
 require 'active_support/dependencies'
 
 module Metanol
@@ -15,28 +11,16 @@ module Metanol
         @@metanol_options ||= {}
       end
 
-      def meta(*args)
-        add_meta_tag(:main, *args)
-      end
+      SUPPORT_GROUPS.keys.each do |method|
+        method_name = "#{method == :main ? '' : "#{method}_"}meta"
+        define_method method_name do |*args|
+          add_meta_tag(method, *args)
+        end
 
-      def og_meta(*args)
-        add_meta_tag(:og, *args)
-      end
-
-      def wm_meta(*args)
-        add_meta_tag(:wm, *args)
-      end
-
-      def get_meta(name)
-        get_meta_by_type(:main, name)
-      end
-
-      def get_og_meta(name)
-        get_meta_by_type(:og, name)
-      end
-
-      def get_wm_meta(name)
-        get_meta_by_type(:wm, name)
+        get_method_name = "get_#{method_name}"
+        define_method get_method_name do |name|
+          get_meta_by_type(method, name)
+        end
       end
 
       private
@@ -56,57 +40,41 @@ module Metanol
       end
 
       def add_meta_by_type(type, name, value, filters=[])
-        data = meta_data(name)[type]
-        key = data[:key]
+        meta_class = SUPPORT_GROUPS[type]
+        key = get_meta_key(type, name)
         if metanol_options.key? key
           metanol_options[key].value = value
           metanol_options[key].filters = filters
         else
-          metanol_options[key] = data[:type].new(name, value, filters)
+          metanol_options[key] = meta_class.new(name, value, filters)
         end
       end
 
       def get_meta_by_type(type, name)
-        data = meta_data(name)[type]
-        key = data[:key]
+        key = get_meta_key(type, name)
         metanol_options.key?(key) ? metanol_options[key].value : nil
       end
 
-      def meta_data(name)
-        {
-            main: { key: name, type: Meta::Main },
-            og: { key: "og:#{name}", type: Meta::OpenGraph },
-            wm: { key: "wm:#{name}", type: Meta::Webmaster }
-        }
+      def get_meta_key(type, name)
+        "#{type}:#{name}"
       end
+
     end
 
-    def meta(*args)
-      self.class.meta(*args)
-    end
+    SUPPORT_GROUPS.keys.each do |method|
+      method_name = "#{method == :main ? '' : "#{method}_"}meta"
+      define_method method_name do |*args|
+        self.class.send(method_name, *args)
+      end
 
-    def og_meta(*args)
-      self.class.og_meta(*args)
-    end
-
-    def wm_meta(*args)
-      self.class.wm_meta(*args)
+      get_method_name = "get_#{method_name}"
+      define_method get_method_name do |name|
+        self.class.send(get_method_name, name)
+      end
     end
 
     def metanol_options
       self.class.metanol_options
-    end
-
-    def get_meta(name)
-      self.class.get_meta name
-    end
-
-    def get_og_meta(name)
-      self.class.get_og_meta name
-    end
-
-    def get_wm_meta(name)
-      self.class.get_wm_meta name
     end
 
   end

@@ -3,44 +3,37 @@ module Metanol
 
     # Render all meta tags
     def metanol_tags
-      result = metanol_main_tags
-      result << metanol_og_tags
-      result << metanol_wm_tags
-      result
+      result = ''
+      SUPPORT_GROUPS.keys.each do |type|
+        result << send("metanol_#{type}_tags")
+      end
+      result.html_safe
     end
 
     # Render OpenGraph meta tags
     def metanol_og_tags
       result = metanol_render_tags ::Metanol::Meta::OpenGraph
-      result << ::Metanol::Meta::OpenGraph.render_current_url(current_url).html_safe
-      result
+      result << ::Metanol::Meta::OpenGraph.render_current_url(current_url)
+      result.html_safe
     end
 
-    # Render Webmaster verification tags
-    def metanol_wm_tags
-      metanol_render_tags ::Metanol::Meta::Webmaster
-    end
+    SUPPORT_GROUPS.keys.each do |method|
+      get_method_name = "get_#{method == :main ? '' : "#{method}_"}meta"
+      define_method get_method_name do |name|
+        self.controller.send(get_method_name, name)
+      end
 
-    # Render main tags, such as keywords, description, etc.
-    def metanol_main_tags
-      metanol_render_tags ::Metanol::Meta::Main
+      next if method == :og
+      method_name = "metanol_#{method}_tags"
+      class_type = SUPPORT_GROUPS[method]
+      define_method method_name do
+        metanol_render_tags(class_type).html_safe
+      end
     end
 
     # Return a current URL
     def current_url
       request.original_url
-    end
-
-    def get_meta(name)
-      self.controller.get_meta(name)
-    end
-
-    def get_og_meta(name)
-      self.controller.get_og_meta(name)
-    end
-
-    def get_wm_meta(name)
-      self.controller.get_wm_meta(name)
     end
 
     private
@@ -51,7 +44,7 @@ module Metanol
         next unless value.is_a? type
         result << value.render
       end
-      result.html_safe
+      result
     end
 
   end
