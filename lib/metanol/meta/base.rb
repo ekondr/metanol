@@ -17,7 +17,8 @@ module Metanol::Meta
     end
 
     def render
-      "<meta #{self.attr_name}=\"#{self.name}\" #{self.attr_value}=\"#{self.value}\" />"
+      result = self.value
+      !result.blank? ? "<meta #{self.attr_name}=\"#{self.name}\" #{self.attr_value}=\"#{result}\" />" : ''
     end
 
     def name

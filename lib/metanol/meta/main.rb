@@ -2,7 +2,8 @@ module Metanol::Meta
 
   class Main < Base
     def render
-      return "<title>#{self.value}</title>" if @name == :title
+      result = self.value
+      return (!result.blank? ? "<title>#{result}</title>": '') if @name == :title
       super
     end
   end
