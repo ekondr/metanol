@@ -31,6 +31,18 @@ module Metanol
       request.original_url
     end
 
+    def get_meta(name)
+      self.controller.get_meta(name)
+    end
+
+    def get_og_meta(name)
+      self.controller.get_og_meta(name)
+    end
+
+    def get_wm_meta(name)
+      self.controller.get_wm_meta(name)
+    end
+
     private
 
     def metanol_render_tags(type)

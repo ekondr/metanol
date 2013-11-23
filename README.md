@@ -6,7 +6,7 @@ This is a meta tags plugin which helps to manage meta tags in your Rails applica
 
 Add this line to your application's Gemfile:
 
-    gem 'metanol'
+    gem 'metanol', '~> 0.0.4'
 
 And then execute:
 
@@ -17,6 +17,8 @@ Or install it yourself as:
     $ gem install metanol
 
 ## Usage
+
+### Methods of a Controller
 
 There are two ways to set meta tags. The first one is a setting values for meta tags in a controller:
     
@@ -66,11 +68,20 @@ There are some filters which you can set for methods above:
 * `whitespaces` - to get rid of whitespaces in a value (i.e. `meta({title: "Page title", description: 'Page description'}, :html, :whitespaces)`)
 * `clean` - apply `html`, `overspaces` and `whitespaces` filters for a value
 
+There are some methods for getting a meta's value:
+* `get_meta(name)` - returns a value of a specified HTML meta tag
+* `get_og_meta(name)` - returns a value of a specified OpenGraph meta tags
+* `get_wm_meta(name)` - returns a value of a specified Webmaster meta tags
+
+### Helpers
+
 Here is the helper's methods for rendering meta tags:
 * `metanol_tags` - renders all meta tags (Webmaster, OpenGraph and other)
 * `metanol_og_tags` - renders only OpenGraph's meta tags
 * `metanol_wm_tags` - renders Webmaster verification tags
 * `metanol_main_tags` - renders other meta tags, such as keywords, description, etc.
+
+Also the plugin provides some helper's methods for getting a meta's value: `get_meta(name)`, `get_og_meta(name)`, `get_wm_meta(name)`.
 
 ## Contributing
 

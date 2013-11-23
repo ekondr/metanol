@@ -27,6 +27,18 @@ module Metanol
         add_meta_tag(:wm, *args)
       end
 
+      def get_meta(name)
+        get_meta_by_type(:main, name)
+      end
+
+      def get_og_meta(name)
+        get_meta_by_type(:og, name)
+      end
+
+      def get_wm_meta(name)
+        get_meta_by_type(:wm, name)
+      end
+
       private
 
       def add_meta_tag(type, *args)
@@ -54,6 +66,12 @@ module Metanol
         end
       end
 
+      def get_meta_by_type(type, name)
+        data = meta_data(name)[type]
+        key = data[:key]
+        metanol_options.key?(key) ? metanol_options[key].value : nil
+      end
+
       def meta_data(name)
         {
             main: { key: name, type: Meta::Main },
@@ -77,6 +95,18 @@ module Metanol
 
     def metanol_options
       self.class.metanol_options
+    end
+
+    def get_meta(name)
+      self.class.get_meta name
+    end
+
+    def get_og_meta(name)
+      self.class.get_og_meta name
+    end
+
+    def get_wm_meta(name)
+      self.class.get_wm_meta name
     end
 
   end

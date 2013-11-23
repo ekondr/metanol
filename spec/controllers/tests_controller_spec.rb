@@ -153,4 +153,35 @@ describe TestsController do
     it { response.should have_selector('meta[content=" Description for a users list"]', name: 'description') }
   end
 
+  context "returns meta values in a controller and in a view" do
+    controller do
+      def index
+        meta :title,    'Users List'
+        wm_meta :alexa, 'alexa code'
+        og_meta title:  'OpenGraph Title'
+
+        @meta = get_meta :title
+        @wm_meta = get_wm_meta :alexa
+        @og_meta = get_og_meta :title
+        @og_no_meta = get_og_meta :bad_meta_name
+
+        render :inline => <<-ERB
+          <span>Main meta is <%= get_meta :title %></span>
+          <span>OpenGraph meta is <%= get_og_meta :title %></span>
+          <span>Webmaster meta is <%= get_wm_meta :alexa %></span>
+        ERB
+      end
+    end
+
+    before { get :index }
+
+    it { response.should have_selector('span', content: 'Main meta is Users List') }
+    it { response.should have_selector('span', content: 'OpenGraph meta is OpenGraph Title') }
+    it { response.should have_selector('span', content: 'Webmaster meta is alexa code') }
+    it { assigns(:meta).should == 'Users List' }
+    it { assigns(:wm_meta).should == 'alexa code' }
+    it { assigns(:og_meta).should == 'OpenGraph Title' }
+    it { assigns(:og_no_meta).should == nil }
+  end
+
 end
