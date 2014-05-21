@@ -1,9 +1,9 @@
 require 'spec_helper'
 
 describe HomeController do
-  context "render meta tags with some global ones" do
+  context 'render meta tags with some global ones' do
 
-    context "all meta tags" do
+    context 'all meta tags' do
       before { get :index }
 
       it { response.should have_selector("meta[content=\"#{url_for(controller: :home, action: :index, host: 'test.host')}\"]", property: 'og:url') }
@@ -15,6 +15,7 @@ describe HomeController do
       it { response.should have_selector('meta[content="alexa code"]', name: 'alexaVerifyID') }
       it { response.should have_selector('meta[content="google code"]', name: 'google-site-verification') }
       it { response.should have_selector('meta[content="yandex code"]', name: 'yandex-verification') }
+      it { response.body.should =~ /<title>Index Page<\/title>/ }
     end
 
     context "only WebMaster's meta tags" do
@@ -26,6 +27,12 @@ describe HomeController do
       it { response.should have_selector('meta[content="alexa code"]', name: 'alexaVerifyID') }
       it { response.should have_selector('meta[content="google code"]', name: 'google-site-verification') }
       it { response.should have_selector('meta[content="yandex code"]', name: 'yandex-verification') }
+    end
+
+    context 'correct title tag' do
+      before { get :index }
+      before { get :get_title }
+      it { response.body.should_not =~ /<title>Index Page<\/title>/ }
     end
 
   end

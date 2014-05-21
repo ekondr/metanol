@@ -39,8 +39,9 @@ module Metanol
     private
 
     def metanol_render_tags(type)
-      result = ""
-      self.controller.metanol_options.each_value do |value|
+      result = ''
+      metanols = self.controller.class.common_metanols.merge(self.controller.action_metanols)
+      metanols.each_value do |value|
         next unless value.is_a? type
         result << value.render
       end

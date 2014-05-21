@@ -6,8 +6,8 @@ ActiveRecord::Base.configurations = {'test' => {:adapter => 'sqlite3', :database
 ActiveRecord::Base.establish_connection('test')
 
 app = Class.new(Rails::Application)
-app.config.secret_token = "f974ebb750a8e200c85f7a749d589fa2"
-app.config.session_store :cookie_store, :key => "_myapp_session"
+app.config.secret_token = 'f974ebb750a8e200c85f7a749d589fa2'
+app.config.session_store :cookie_store, :key => '_myapp_session'
 app.config.active_support.deprecation = :log
 app.config.eager_load = false
 app.config.root = File.dirname(__FILE__)
@@ -16,7 +16,11 @@ app.initialize!
 
 app.routes.draw do
   resources :tests
-  resources :home
+  resources :home do
+    collection do
+      get :get_title
+    end
+  end
 end
 
 class ApplicationController < ActionController::Base; end
@@ -38,9 +42,16 @@ class HomeController < ParentController
   end
 
   def index
-    og_meta title: "OpenGraph Title", description: "OpenGraph Description"
+    meta :title, 'Index Page'
+    og_meta title: 'OpenGraph Title', description: 'OpenGraph Description'
     render :inline => <<-ERB
       <%= metanol_tags %>
+    ERB
+  end
+
+  def get_title
+    render :inline => <<-ERB
+      <%= metanol_main_tags %>
     ERB
   end
 end
