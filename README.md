@@ -6,7 +6,7 @@ This is a meta tags plugin which helps to manage meta tags in your Rails applica
 
 Add this line to your application's Gemfile:
 
-    gem 'metanol', '~> 0.0.5'
+    gem 'metanol', '~> 0.0.8'
 
 And then execute:
 
