@@ -1,19 +1,28 @@
-*.gem
-*.rbc
-.bundle
-.config
-.yardoc
-Gemfile.lock
-InstalledFiles
-_yardoc
-coverage
-doc/
-lib/bundler/man
-pkg
-rdoc
-spec/reports
-test/tmp
-test/version_tmp
-tmp
+/.bundle/
+/.yardoc
+/_yardoc/
+/coverage/
+/doc/
+/pkg/
+/spec/reports/
+/tmp/
+
+# rspec failure tracking
+.rspec_status
+
+# Ignore all logfiles and tempfiles.
+/log/*
+/tmp/*
 .idea/
-log/
+!/log/.keep
+!/tmp/.keep
+
+.DS_Store
+.byebug_history
+
+# Ignore ruby version and gemset
+.ruby-gemset
+.ruby-version
+
+# Ignore bin folder
+/bin/
