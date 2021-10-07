@@ -1,0 +1,73 @@
+gemfile: '.overcommit_gems'
+
+CommitMsg:
+  ALL:
+    requires_files: false
+    quiet: false
+
+  EmptyMessage:
+    enabled: true
+    description: 'Checking for empty commit message'
+    quiet: true
+
+  SingleLineSubject:
+    enabled: true
+    description: 'Checking subject line'
+
+  TextWidth:
+    enabled: true
+    description: 'Checking commit subject and body width'
+    max_subject_width: 60
+    max_body_width: 72
+
+  TrailingPeriod:
+    enabled: true
+    description: 'Checking for trailing periods in commit subject'
+
+PreCommit:
+  ALL:
+    problem_on_unmodified_line: report
+    requires_files: true
+    required: true
+    quiet: false
+
+  AuthorEmail:
+    enabled: true
+    description: 'Checking author email'
+    requires_files: false
+    pattern: '^[^@]+@.*$'
+
+  AuthorName:
+    enabled: true
+    description: 'Checking author name'
+    requires_files: false
+
+  BrokenSymlinks:
+    enabled: false # this was enabled by default
+    description: 'Checking for broken symlinks'
+
+  CaseConflicts:
+    enabled: true
+    description: 'Checking for case-insensitivity conflicts'
+
+  MergeConflicts:
+    enabled: true
+    description: 'Checking for merge conflicts'
+    required_executable: 'grep'
+    flags: ['-IHn', "^<<<<<<<[ \t]"]
+
+  RuboCop:
+    enabled: true
+    required: true
+    problem_on_unmodified_line: ignore
+    description: 'Analyzing ruby code with RuboCop'
+    required_executable: 'rubocop'
+    flags: ['--format=emacs', '--force-exclusion', '--display-cop-names', '--require=rubocop-rspec', '--require=rubocop-rails']
+    command: ['bundle', 'exec', 'rubocop']
+    install_command: 'gem install rubocop'
+    include:
+      - '**/*.rake'
+      - '**/*.rb'
+      - '**/*.ru'
+      - '**/Gemfile'
+      - '**/.overcommit_gems'
