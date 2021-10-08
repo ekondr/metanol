@@ -1,6 +1,5 @@
 module Metanol
   module Helpers
-
     # Render all meta tags
     def metanol_tags
       result = ''
@@ -20,10 +19,11 @@ module Metanol
     SUPPORT_GROUPS.keys.each do |method|
       get_method_name = "get_#{method == :main ? '' : "#{method}_"}meta"
       define_method get_method_name do |name|
-        self.controller.send(get_method_name, name)
+        controller.__send__(get_method_name, name)
       end
 
       next if method == :og
+
       method_name = "metanol_#{method}_tags"
       class_type = SUPPORT_GROUPS[method]
       define_method method_name do
@@ -40,13 +40,13 @@ module Metanol
 
     def metanol_render_tags(type)
       result = ''
-      metanols = self.controller.class.common_metanols.merge(self.controller.action_metanols)
+      metanols = controller.class.common_metanols.merge(controller.action_metanols)
       metanols.each_value do |value|
         next unless value.is_a? type
+
         result << value.render
       end
       result
     end
-
   end
 end

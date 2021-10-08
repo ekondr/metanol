@@ -1,11 +1,13 @@
-module Metanol::Meta
+# frozen_string_literal: true
 
-  class Main < Base
-    def render
-      result = self.value
-      return (!result.blank? ? "<title>#{result}</title>": '') if @name == :title
-      super
+module Metanol
+  module Meta
+    class Main < Base
+      def render
+        return (value.present? ? "<title>#{value}</title>" : '') if @name == :title
+
+        super
+      end
     end
   end
-
 end

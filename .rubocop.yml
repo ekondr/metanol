@@ -74,7 +74,7 @@ Metrics/BlockLength:
 
 # Following Cops were disabled:
 
-Encoding:
+Style/Encoding:
   Description: 'Use UTF-8 as the source file encoding.'
   Enabled: false
 
@@ -101,6 +101,10 @@ Rails/SkipsModelValidations:
 Rails/NotNullColumn:
   Enabled: false
 
+Rails/RenderInline:
+  Description: Prefer using a template over inline rendering.
+  Enabled: false
+
 # RSpec cops
 
 RSpec/ExampleLength:
@@ -119,6 +123,9 @@ RSpec/MultipleExpectations:
 RSpec/VerifiedDoubles:
   Description: 'Prefer using verifying doubles over normal doubles.'
   Enabled: false
+
+RSpec/NestedGroups:
+  Max: 4
 
 # Global configuration:
 

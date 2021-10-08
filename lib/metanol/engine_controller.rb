@@ -1,13 +1,12 @@
 require 'active_support/dependencies'
 
 module Metanol
-
   # Engine's controller which has all methods for storing and processing meta tag's data
   module EngineController
     extend ActiveSupport::Concern
 
     included do
-      before_filter :clear_metanols
+      before_action :clear_metanols
     end
 
     module ClassMethods
@@ -43,7 +42,7 @@ module Metanol
         end
       end
 
-      def add_meta_by_type(repo, type, name, value, filters=[])
+      def add_meta_by_type(repo, type, name, value, filters = [])
         meta_class = SUPPORT_GROUPS[type]
         key = get_meta_key(type, name)
         unless repo.key? key
@@ -85,7 +84,5 @@ module Metanol
     def clear_metanols
       @action_metanols = {}
     end
-
   end
-
 end

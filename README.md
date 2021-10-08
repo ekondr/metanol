@@ -93,3 +93,8 @@ Also the plugin provides some helper's methods for getting a meta's value: `get_
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create new Pull Request
+
+### Do not forget to install OverCommit before making a PR
+
+1. Run `bundle install --gemfile=.overcommit_gems`
+2. Run `overcommit -i`

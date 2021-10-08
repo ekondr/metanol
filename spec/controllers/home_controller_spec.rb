@@ -1,39 +1,106 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
-describe HomeController do
-  context 'render meta tags with some global ones' do
-
-    context 'all meta tags' do
+RSpec.describe HomeController, type: :controller do
+  context 'when renders meta tags' do
+    context 'with all meta tags' do
       before { get :index }
 
-      it { response.should have_selector("meta[content=\"#{url_for(controller: :home, action: :index, host: 'test.host')}\"]", property: 'og:url') }
-      it { response.should have_selector('meta[content="OpenGraph Title"]', property: 'og:title') }
-      it { response.should have_selector('meta[content="OpenGraph Description"]', property: 'og:description') }
-      it { response.should have_selector('meta[content="website"]', property: 'og:type') }
-      it { response.should have_selector('meta[content="uk_UA"]', property: 'og:locale') }
-      it { response.should have_selector('meta[content="bing code"]', name: 'msvalidate.01') }
-      it { response.should have_selector('meta[content="alexa code"]', name: 'alexaVerifyID') }
-      it { response.should have_selector('meta[content="google code"]', name: 'google-site-verification') }
-      it { response.should have_selector('meta[content="yandex code"]', name: 'yandex-verification') }
-      it { response.body.should =~ /<title>Index Page<\/title>/ }
+      it do
+        url = url_for(controller: :home, action: :index, host: 'test.host')
+        expect(response.body)
+          .to have_css "meta[content=\"#{url}\"][property=\"og:url\"]", visible: :hidden
+      end
+
+      it do
+        expect(response.body)
+          .to have_css('meta[content="OpenGraph Title"][property="og:title"]', visible: :hidden)
+      end
+
+      it do
+        expect(response.body)
+          .to have_css 'meta[content="OpenGraph Description"][property="og:description"]',
+                       visible: :hidden
+      end
+
+      it do
+        expect(response.body)
+          .to have_css('meta[content="website"][property="og:type"]', visible: :hidden)
+      end
+
+      it do
+        expect(response.body)
+          .to have_css('meta[content="uk_UA"][property="og:locale"]', visible: :hidden)
+      end
+
+      it do
+        expect(response.body)
+          .to have_css('meta[content="bing code"][name="msvalidate.01"]', visible: :hidden)
+      end
+
+      it do
+        expect(response.body)
+          .to have_css('meta[content="alexa code"][name="alexaVerifyID"]', visible: :hidden)
+      end
+
+      it do
+        expect(response.body)
+          .to have_css 'meta[content="google code"][name="google-site-verification"]',
+                       visible: :hidden
+      end
+
+      it do
+        expect(response.body)
+          .to have_css 'meta[content="yandex code"][name="yandex-verification"]',
+                       visible: :hidden
+      end
+
+      it do
+        expect(response.body).to match(%r{<title>Index Page</title>})
+      end
     end
 
-    context "only WebMaster's meta tags" do
+    context 'with webmaster meta tags' do
       before { get :new }
 
-      it { response.should_not have_selector('meta[content="website"]', property: 'og:type') }
-      it { response.should_not have_selector('meta[content="uk_UA"]', property: 'og:locale') }
-      it { response.should have_selector('meta[content="bing code"]', name: 'msvalidate.01') }
-      it { response.should have_selector('meta[content="alexa code"]', name: 'alexaVerifyID') }
-      it { response.should have_selector('meta[content="google code"]', name: 'google-site-verification') }
-      it { response.should have_selector('meta[content="yandex code"]', name: 'yandex-verification') }
+      it do
+        expect(response.body)
+          .not_to have_css('meta[content="website"][property="og:type"]', visible: :hidden)
+      end
+
+      it do
+        expect(response.body)
+          .not_to have_css('meta[content="uk_UA"][property="og:locale"]', visible: :hidden)
+      end
+
+      it do
+        expect(response.body)
+          .to have_css('meta[content="bing code"][name="msvalidate.01"]', visible: :hidden)
+      end
+
+      it do
+        expect(response.body)
+          .to have_css('meta[content="alexa code"][name="alexaVerifyID"]', visible: :hidden)
+      end
+
+      it do
+        expect(response.body)
+          .to have_css('meta[content="google code"][name="google-site-verification"]', visible: :hidden)
+      end
+
+      it do
+        expect(response.body)
+          .to have_css('meta[content="yandex code"][name="yandex-verification"]', visible: :hidden)
+      end
     end
 
-    context 'correct title tag' do
-      before { get :index }
-      before { get :get_title }
-      it { response.body.should_not =~ /<title>Index Page<\/title>/ }
-    end
+    context 'with main meta tags' do
+      before { get :show_title }
 
+      it 'not have title meta tag' do
+        expect(response.body).not_to match(/<title>/)
+      end
+    end
   end
 end

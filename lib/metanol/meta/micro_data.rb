@@ -1,13 +1,13 @@
-module Metanol::Meta
+# frozen_string_literal: true
 
-  class MicroData < Base
+module Metanol
+  module Meta
+    class MicroData < Base
+      protected
 
-    protected
-
-    def attr_name
-      'itemprop'
+      def attr_name
+        'itemprop'
+      end
     end
-
   end
-
 end

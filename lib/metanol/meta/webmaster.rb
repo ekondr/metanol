@@ -1,22 +1,24 @@
-module Metanol::Meta
-  class Webmaster < Base
+# frozen_string_literal: true
 
-    SUPPORT_TAGS = {
-        yandex: 'yandex-verification',
-        google: 'google-site-verification',
+module Metanol
+  module Meta
+    class Webmaster < Base
+      SUPPORT_TAGS = {
         bing: 'msvalidate.01',
-        alexa: 'alexaVerifyID'
-    }
+        alexa: 'alexaVerifyID',
+        yandex: 'yandex-verification',
+        google: 'google-site-verification'
+      }.freeze
 
-    def name
-      SUPPORT_TAGS[@name]
+      def name
+        SUPPORT_TAGS[@name]
+      end
+
+      protected
+
+      def valid?(name)
+        SUPPORT_TAGS[name].present?
+      end
     end
-
-    protected
-
-    def valid?(name)
-      !SUPPORT_TAGS[name.to_sym].nil?
-    end
-
   end
 end
